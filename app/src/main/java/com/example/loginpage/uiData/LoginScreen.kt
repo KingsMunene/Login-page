@@ -9,9 +9,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
+
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ColorScheme
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -27,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,8 +52,11 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
         Text(stringResource(R.string.page_title),
         style = MaterialTheme.typography.titleLarge)
 
-        LoginForm(userName = loginState.userName ,
-        onUserNameChange = {loginViewModel.onUserNameChanged(it)},)
+        LoginForm(
+            userName = loginViewModel.userName,
+            onUserNameChange = {loginViewModel.onUserNameChanged(it)},
+            password = loginViewModel.password,
+            onPasswordChange = {loginViewModel.onPasswordChanged(it)},)
 
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -72,8 +78,10 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
 @Composable
 fun LoginForm(userName: String,
               onUserNameChange:(String) -> Unit,
-              modifier: Modifier = Modifier) {
-
+              password: String,
+              onPasswordChange:(String) -> Unit,
+              modifier: Modifier = Modifier
+) {
     val mediumPadding = dimensionResource(R.dimen.medium_padding)
 
     Card(elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)){
@@ -82,7 +90,8 @@ fun LoginForm(userName: String,
             .padding(mediumPadding),
             verticalArrangement = Arrangement.spacedBy(mediumPadding),
         horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(value = userName,
+            OutlinedTextField(
+                value = userName,
                 onValueChange = onUserNameChange,
                 label = { Text(text = stringResource(id = R.string.user_name)) },
                 singleLine = true,
@@ -96,15 +105,17 @@ fun LoginForm(userName: String,
                 modifier = modifier)
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = password,
+                onValueChange = onPasswordChange,
                 isError = false,
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(containerColor = colorScheme.surface),
                 label = { Text(stringResource(R.string.Password_label)) },
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
                 ),
+                visualTransformation = PasswordVisualTransformation(),
                 keyboardActions = KeyboardActions(
                     onDone = {}
                 ),

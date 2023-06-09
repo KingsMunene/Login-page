@@ -19,8 +19,16 @@ class LoginViewModel : ViewModel() {
 
     var userName by mutableStateOf("")
 
+    var password by mutableStateOf("")
+
+    // Function to update user name
     fun onUserNameChanged(word: String) {
         userName = word
+    }
+
+    // Function to update user password
+    fun onPasswordChanged(word: String) {
+        password = word
     }
 
 
