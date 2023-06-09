@@ -3,5 +3,7 @@
     <string name="user_name">User Name</string>
     <string name="Password_label">Password</string>
     <string name="wrong_password">Wrong Password</string>
-    <string name="page_title">Login</string>
+    <string name="page_title">Welcome User</string>
+    <string name="login_button">Login</string>
+    <string name="signup_button">Sign Up</string>
 </resources>
