@@ -119,7 +119,7 @@ fun LoginForm(userName: String,
                 isError = correctUser,
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(containerColor = colorScheme.surface),
-                label = { if (correctUser) Text(stringResource(R.string.Password_label)) else
+                label = { if (!correctUser) Text(stringResource(R.string.Password_label)) else
                     Text(stringResource(R.string.wrong_password)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
