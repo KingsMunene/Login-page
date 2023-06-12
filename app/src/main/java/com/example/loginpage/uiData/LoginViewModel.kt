@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.update
 // Login ViewModel
 class LoginViewModel : ViewModel() {
 
-    data class LoginPageUiState(val wrongUser: Boolean = false)
+    data class LoginPageUiState(val wrongUser: Boolean = false,
+                                val newUser: Boolean = false)
 
     private val _uiState = MutableStateFlow(LoginPageUiState())
 
@@ -58,10 +59,19 @@ class LoginViewModel : ViewModel() {
 
     // Function to  add a new user to the system
     fun addNewUser(){
+        val currentUsers = users.values.size
+
         val user = User(userName, passWord)
         users[user.userName] = user
 
+        if (currentUsers < users.values.size ){
+            _uiState.update {currentState ->
+                currentState.copy(newUser = true)
+            }
+        }
         clearAll()
+
+
     }
 
     // Clear Fields
