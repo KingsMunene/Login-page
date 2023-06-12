@@ -2,8 +2,10 @@ package com.example.loginpage.uiData
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -42,7 +44,6 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
     modifier: Modifier = Modifier
 ){
     val mediumPadding = dimensionResource(R.dimen.medium_padding)
-
     val loginState by loginViewModel.uiState.collectAsState()
 
     Column(modifier = modifier
@@ -59,14 +60,21 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
             userName = loginViewModel.userName,
             onUserNameChange = {loginViewModel.onUserNameChanged(it)},
             password = loginViewModel.password,
-            onPasswordChange = {loginViewModel.onPasswordChanged(it)},)
+            onPasswordChange = {loginViewModel.onPasswordChanged(it)},
+            correctUser = loginState.wrongUser)
+
+        Spacer(modifier = modifier.height(5.dp))
+
+
 
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(mediumPadding),
             verticalArrangement = Arrangement.spacedBy(mediumPadding),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(
+                onClick = { loginViewModel.checkUserNameCredentials() },
+                modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.login_button))
             }
 
@@ -83,6 +91,7 @@ fun LoginForm(userName: String,
               onUserNameChange:(String) -> Unit,
               password: String,
               onPasswordChange:(String) -> Unit,
+              correctUser: Boolean,
               modifier: Modifier = Modifier
 ) {
     val mediumPadding = dimensionResource(R.dimen.medium_padding)
@@ -102,18 +111,16 @@ fun LoginForm(userName: String,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(
-                    onDone = {}
-                ),
                 modifier = modifier)
 
             OutlinedTextField(
                 value = password,
                 onValueChange = onPasswordChange,
-                isError = false,
+                isError = correctUser,
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(containerColor = colorScheme.surface),
-                label = { Text(stringResource(R.string.Password_label)) },
+                label = { if (correctUser) Text(stringResource(R.string.Password_label)) else
+                    Text(stringResource(R.string.wrong_password)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Password
@@ -121,12 +128,12 @@ fun LoginForm(userName: String,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardActions = KeyboardActions(
                     onDone = {}
-                ),
-                modifier = modifier
+                )
             )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
