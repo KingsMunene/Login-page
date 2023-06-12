@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.loginpage.data.DataManager.users
+import com.example.loginpage.data.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,9 +15,7 @@ import kotlinx.coroutines.flow.update
 // Login ViewModel
 class LoginViewModel : ViewModel() {
 
-    data class LoginPageUiState(val wrongUser: Boolean = false,
-                                val currentUser: String = "",
-                                val currentPassword: String = "")
+    data class LoginPageUiState(val wrongUser: Boolean = false)
 
     private val _uiState = MutableStateFlow(LoginPageUiState())
 
@@ -25,7 +24,7 @@ class LoginViewModel : ViewModel() {
 
     var userName by mutableStateOf("")
 
-    var password by mutableStateOf("")
+    var passWord by mutableStateOf("")
 
     // Function to update user name
     fun onUserNameChanged(word: String) {
@@ -34,7 +33,7 @@ class LoginViewModel : ViewModel() {
 
     // Function to update user password
     fun onPasswordChanged(word: String) {
-        password = word
+        passWord = word
     }
 
 
@@ -45,7 +44,7 @@ class LoginViewModel : ViewModel() {
 
         if (users.containsKey(userName)) {
             val user = users[userName]
-            if (user?.password != password) {
+            if (user?.password != passWord) {
                 _uiState.update{ currentState ->
                     currentState.copy(wrongUser = true)
                 }
@@ -55,6 +54,20 @@ class LoginViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    // Function to  add a new user to the system
+    fun addNewUser(){
+        val user = User(userName, passWord)
+        users[user.userName] = user
+
+        clearAll()
+    }
+
+    // Clear Fields
+    fun clearAll(){
+        userName = ""
+        passWord = ""
     }
 
 

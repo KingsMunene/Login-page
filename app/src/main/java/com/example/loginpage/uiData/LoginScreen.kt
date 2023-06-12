@@ -59,7 +59,7 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
         LoginForm(
             userName = loginViewModel.userName,
             onUserNameChange = {loginViewModel.onUserNameChanged(it)},
-            password = loginViewModel.password,
+            password = loginViewModel.passWord,
             onPasswordChange = {loginViewModel.onPasswordChanged(it)},
             correctUser = loginState.wrongUser)
 
@@ -78,7 +78,7 @@ fun LoginPage(loginViewModel: LoginViewModel = viewModel(),
                 Text(stringResource(R.string.login_button))
             }
 
-            Button(onClick = { }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { loginViewModel.addNewUser() }, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.signup_button))
             }
         }
